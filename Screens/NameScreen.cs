@@ -28,8 +28,7 @@ namespace ComputerPlusPlus.Screens
 
         public void OnKeyPressed(GorillaKeyboardButton button)
         {
-            ComputerManager.ComputerTraverse.Method("ProcessNameState", button).GetValue();
-
+            GorillaComputer.instance.ProcessNameState(button.Binding);
         }
 
         public void Start() { }

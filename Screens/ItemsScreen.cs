@@ -31,7 +31,7 @@ namespace ComputerPlusPlus.Screens
 
         public void OnKeyPressed(GorillaKeyboardButton button)
         {
-            ComputerManager.ComputerTraverse.Method("ProcessVisualsState", button).GetValue();
+            GorillaComputer.instance.ProcessVisualsState(button.Binding);
         }
 
 

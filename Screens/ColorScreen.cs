@@ -1,10 +1,5 @@
 ﻿using ComputerPlusPlus.Tools;
 using GorillaNetworking;
-using HarmonyLib;
-using Photon.Pun;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace ComputerPlusPlus.Screens
@@ -22,8 +17,6 @@ namespace ComputerPlusPlus.Screens
             "    {0}{1}: {2}\n";
 
         public int selectedColorIndex = 0, presetIndex = -1;
-        Traverse computerTraverse, colorCursorLine;
-
 
         //Two-dimensional int array of color presets
         public int[,] presets = new int[10, 3]
@@ -52,7 +45,7 @@ namespace ComputerPlusPlus.Screens
                     number = 9;
                 content += string.Format(
                     Template,
-                    i == colorCursorLine.GetValue<int>() ? ">" : "",
+                    i == GorillaComputer.instance.colorCursorLine ? ">" : "",
                     colors[i],
                     number
                 );
@@ -65,19 +58,19 @@ namespace ComputerPlusPlus.Screens
             var computer = GorillaComputer.instance;
             if (button.IsNumericKey())
             {
-                computerTraverse.Method("ProcessColorState", button).GetValue();
+                computer.ProcessColorState(button.Binding);
                 return;
             }
             switch (button.characterString.ToLower())
             {
                 case "option1":
-                    colorCursorLine.SetValue(0);
+                    computer.colorCursorLine = 0;
                     break;
                 case "option2":
-                    colorCursorLine.SetValue(1);
+                    computer.colorCursorLine = 1;
                     break;
                 case "option3":
-                    colorCursorLine.SetValue(2);
+                    computer.colorCursorLine = 2;
                     break;
                 case "enter":
                     presetIndex++;
@@ -87,21 +80,17 @@ namespace ComputerPlusPlus.Screens
                     for (int i = 0; i < presets.GetLength(1); i++)
                     {
                         Logging.Debug("===Color:", presets[presetIndex, i]);
-                        colorCursorLine.SetValue(i);
-                        computerTraverse.Method("ProcessColorState",
-                            ComputerManager.GetKey(presets[presetIndex, i])
-                        ).GetValue();
-
+                        computer.colorCursorLine = i;
+                        computer.ProcessColorState(ComputerManager.GetKey(presets[presetIndex, i]).Binding);
                     }
-                    computerTraverse.Method("ProcessColorState", ComputerManager.Keys["enter"]).GetValue();
+                    computer.ProcessColorState(ComputerManager.Keys["enter"].Binding);
                     break;
             }
         }
 
+        public void Start()
+        {
 
-        public void Start() { 
-            computerTraverse = Traverse.Create(GorillaComputer.instance);
-            colorCursorLine = computerTraverse.Field("colorCursorLine");
         }
     }
 }

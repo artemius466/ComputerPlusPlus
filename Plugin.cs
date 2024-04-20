@@ -46,6 +46,7 @@ namespace ComputerPlusPlus
             ComputerManager.Instance.RegisterScreen(new ThemeScreen());
             ComputerManager.Instance.RegisterScreen(new TurnScreen());
             ComputerManager.Instance.RegisterScreen(new VoiceScreen());
+            ComputerManager.Instance.RegisterScreen(new AutoMute());
             ComputerManager.Instance.RegisterScreen(new QueueScreen());
             ComputerManager.Instance.RegisterScreen(new GroupScreen());
             ComputerManager.Instance.RegisterScreen(new ItemsScreen());

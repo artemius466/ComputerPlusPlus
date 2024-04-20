@@ -38,19 +38,13 @@ namespace ComputerPlusPlus.Screens
                 case "option1":
                 case "option2":
                 case "option3":
-                    ComputerManager.ComputerTraverse.Method("ProcessMicState", button).GetValue();
+                    GorillaComputer.instance.ProcessMicState(button.Binding);
                     break;
                 case "enter":
-                    if(GorillaComputer.instance.voiceChatOn == "FALSE")
-                        ComputerManager.ComputerTraverse.Method(
-                            "ProcessVoiceState",
-                            ComputerManager.Keys["option1"]
-                        ).GetValue();
+                    if (GorillaComputer.instance.voiceChatOn == "FALSE")
+                        GorillaComputer.instance.ProcessVoiceState(ComputerManager.Keys["option1"].Binding);
                     else
-                        ComputerManager.ComputerTraverse.Method(
-                                "ProcessVoiceState",
-                                ComputerManager.Keys["option2"]
-                            ).GetValue();
+                        GorillaComputer.instance.ProcessVoiceState(ComputerManager.Keys["option2"].Binding);
                     break;
             }
         }

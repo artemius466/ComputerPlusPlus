@@ -1,19 +1,18 @@
-﻿using ComputerPlusPlus.Screens;
-using GorillaNetworking;
+﻿using GorillaNetworking;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Photon.Pun;
+using UnityEngine;
 
 namespace ComputerPlusPlus.Patches
 {
-    [HarmonyPatch(typeof(GorillaComputer), "PressButton")]
+    [HarmonyPatch(typeof(GorillaKeyboardButton), "OnTriggerEnter")]
     class KeyPressPatches
     {
-        private static bool Prefix(GorillaKeyboardButton buttonPressed)
+        private static void Prefix(GorillaKeyboardButton __instance, Collider collider)
         {
-            ComputerManager.Instance.OnKeyPressed(buttonPressed);
-            return false;
+            if (collider.GetComponentInParent<GorillaTriggerColliderHandIndicator>() == null)
+                return;
+            ComputerManager.Instance.OnKeyPressed(__instance);
         }
     }
 }

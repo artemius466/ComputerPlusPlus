@@ -295,10 +295,5 @@ namespace ComputerPlusPlus
         {
             return keys[key.ToString()];
         }
-
-        public static Traverse Field(string fieldName)
-        {
-            return ComputerTraverse.Field(fieldName);
-        }
     }
 }

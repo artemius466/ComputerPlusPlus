@@ -103,7 +103,7 @@ namespace ComputerPlusPlus.Screens
             {
                 yield return new WaitForSeconds(1f);
             }
-            GorillaComputer.instance.currentGameMode = gamemodeMap[gamemode.Value];
+            GorillaComputer.instance.currentGameMode.Value = gamemodeMap[gamemode.Value];
             PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(code.Value);
         }
     }

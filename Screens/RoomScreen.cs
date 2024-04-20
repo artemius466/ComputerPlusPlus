@@ -44,11 +44,10 @@ namespace ComputerPlusPlus.Screens
                     GorillaComputer.instance.roomToJoin = code.Substring(0, code.Length - 1);
                     break;
                 case "option1":
-                    PhotonNetworkController.Instance.AttemptDisconnect();
+                    PhotonNetwork.Disconnect();
                     break;
                 case "enter":
-                    Traverse.Create(GorillaComputer.instance)
-                        .Method("ProcessRoomState", button).GetValue();
+                    GorillaComputer.instance.ProcessRoomState(button.Binding);
                     break;
             }
         }

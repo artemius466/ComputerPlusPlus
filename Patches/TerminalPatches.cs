@@ -2,46 +2,44 @@
 using GorillaExtensions;
 using GorillaLocomotion;
 using HarmonyLib;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
-using Utilla;
 
 namespace ComputerPlusPlus.Patches
 {
-    [HarmonyPatch(typeof(GorillaComputerTerminal), "LateUpdate")]
+    [HarmonyPatch(typeof(GorillaComputerTerminal), "Init")]
     static class TerminalPatch
     {
         static List<GorillaComputerTerminal> gottem = new List<GorillaComputerTerminal>();
 
         private static void Postfix(GorillaComputerTerminal __instance)
         {
-            if (!gottem.Contains(__instance))
+            if (gottem.Contains(__instance))
             {
-                gottem.Add(__instance);
-                var screenText = ComputerManager.Instance.CloneAndScale(__instance.myScreenText);
-                var funcText = ComputerManager.Instance.CloneAndScale(__instance.myFunctionText);
-                Logging.Debug("==========================================");
-                Logging.Debug("screenText: " + (screenText == null));
-                Logging.Debug("funcText: " + (funcText == null));
+                Logging.Warning(__instance.gameObject.GetPath(), " has already been added to the terminal list, but is being initialized again.");
+                return;
+            }
+            gottem.Add(__instance);
+            var screenText = ComputerManager.Instance.CloneAndScale(__instance.myScreenText);
+            var funcText = ComputerManager.Instance.CloneAndScale(__instance.myFunctionText);
+            Logging.Debug("==========================================");
+            Logging.Debug("screenText: " + (screenText == null));
+            Logging.Debug("funcText: " + (funcText == null));
 
-                var mirror = __instance.gameObject.AddComponent<ComputerMirror>();
-                mirror.screenText = screenText;
-                mirror.functionsText = funcText;
-                mirror.originalScreenText = __instance.myScreenText;
-                mirror.originalFunctionsText = __instance.myFunctionText;
-            }
-            else
-            {
-                __instance.GetComponent<ComputerMirror>().UpdateText();
-            }
+            var mirror = __instance.gameObject.AddComponent<ComputerMirror>();
+            mirror.terminal = __instance;
+            mirror.screenText = screenText;
+            mirror.functionsText = funcText;
+            mirror.originalScreenText = __instance.myScreenText;
+            mirror.originalFunctionsText = __instance.myFunctionText;
         }
     }
 
     public class ComputerMirror : MonoBehaviour
     {
+        public GorillaComputerTerminal terminal;
+
         public Text screenText, functionsText;
         public Text originalScreenText, originalFunctionsText;
         bool planeSet = false;
@@ -54,6 +52,15 @@ namespace ComputerPlusPlus.Patches
             functionsText.text = ComputerManager.Instance.FunctionsText;
             screenText.color = ComputerManager.Instance.screenText.color;
             functionsText.color = ComputerManager.Instance.functionsText.color;
+        }
+
+        void LateUpdate() 
+        {
+            if (terminal.enabled)
+            {
+                // Logging.Debug("Updating screen");
+                UpdateText();
+            }
         }
 
         void FixedUpdate()
@@ -82,7 +89,7 @@ namespace ComputerPlusPlus.Patches
             {
                 backgroundPlane.position = hit.point;
                 backgroundPlane.rotation = Quaternion.LookRotation(-hit.normal);
-                backgroundPlane.position += backgroundPlane.TransformDirection(-.05f, 0, -.001f);
+                backgroundPlane.position += backgroundPlane.TransformDirection(-.05f, 0, -.0007f);
                 planeSet = true;
             }
         }

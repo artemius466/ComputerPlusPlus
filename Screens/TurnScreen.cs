@@ -23,12 +23,10 @@ namespace ComputerPlusPlus.Screens
             "    Turn type: {0}\n" +
             "    Turn speed: {1}\n";
 
-        Traverse turnValue, turnType;
-
         public string GetContent()
         {
-            string speed = turnValue.GetValue<int>().ToString();
-            string type = turnType.GetValue<string>();
+            string speed = GorillaComputer.instance.turnValue.ToString();
+            string type = GorillaComputer.instance.turnType;
             return string.Format(
                 Template,
                 type,
@@ -38,14 +36,12 @@ namespace ComputerPlusPlus.Screens
 
         public void OnKeyPressed(GorillaKeyboardButton button)
         {
-            ComputerManager.ComputerTraverse.Method("ProcessTurnState", button).GetValue();
+            GorillaComputer.instance.ProcessTurnState(button.Binding);
         }
-
 
         public void Start()
         {
-            turnValue = ComputerManager.Field("turnValue");
-            turnType = ComputerManager.Field("turnType");
+
         }
     }
 }
